@@ -45,7 +45,7 @@
     </div>
 
     <div class="step" id="step5">
-      <h2>Would You Join Me for Coffee? ☕</h2>
+      <h2>I know the perfect spot for coffee ☕ Wanna join?</h2>
       <div class="flex-buttons">
         <button onclick="nextStep(6)">Yes! 💖</button>
         <button id="noBtn" onclick="handleNo()">No 🙈</button>
@@ -61,11 +61,54 @@
         <button type="submit">Let's Do This! 💫</button>
       </form>
     </div>
-
+    
     <div class="step" id="step7">
       <h2 id="finalMessage"></h2>
       <button onclick="showPickupLine()">Can't Wait! 💝</button>
     </div>
-  </div>
+    
+    <script>
+      // Replace this URL with your Google Apps Script Web App URL after deployment
+      const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwnKMU-dWtbfqo16WyCS-AjfwfbtAOrWwUtKmMcZMDquQU2sYZNF9im_xL57b_j8r0d/exec';
+    
+      const usedDates = new Set(); // To track submitted datetime values.
+    
+      document.getElementById('dateForm').addEventListener('submit', function (e) {
+        e.preventDefault();
+    
+        const datetime = document.getElementById('datetime').value;
+        const message = document.getElementById('message').value;
+    
+        // Check for duplicate datetime entries
+        if (usedDates.has(datetime)) {
+          alert('This datetime has already been submitted. Please pick a new time.');
+          return;
+        }
+    
+        usedDates.add(datetime); // Mark the datetime as used
+    
+        const formData = {
+          name: message,
+          date: datetime,
+        };
+    
+        fetch(SCRIPT_URL, {
+          method: 'POST',
+          body: JSON.stringify(formData),
+          mode: 'no-cors',
+        })
+          .then(() => {
+            console.log('Form submitted successfully!');
+            document.getElementById('dateForm').reset(); // Clear the form inputs
+          })
+          .catch((error) => {
+            console.error('Error submitting form:', error);
+          });
+      });
+    </script>
+    
+    
 
 
+</body>
+</html>

@@ -4,6 +4,7 @@ let noCount = 0;
 const audio = document.getElementById('bgMusic');
 const volumeControl = document.getElementById('volumeControl');
 
+
 // Array of cute pickup lines
 const pickupLines = [
 "You have no reflection in the water because even something as beautiful as the blue water couldn't mimic the beauty you possess.",
@@ -239,3 +240,70 @@ for (let i = 0; i < 10; i++) {
     setTimeout(createHeart, i * 200);
 }
 }
+// Set minimum and maximum date-time for the input
+function setMinDateTime() {
+    const now = new Date();
+    now.setMinutes(now.getMinutes() + 30); // Minimum 30 minutes from now
+    
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const day = String(now.getDate()).padStart(2, '0');
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+    
+    const minDateTime = `${year}-${month}-${day}T${hours}:${minutes}`;
+    const dateInput = document.getElementById('datetime');
+    dateInput.min = minDateTime;
+    
+    // Set max date to 3 months from now
+    const maxDate = new Date();
+    maxDate.setMonth(maxDate.getMonth() + 3);
+    const maxDateTime = maxDate.toISOString().slice(0, 16);
+    dateInput.max = maxDateTime;
+}
+
+// Form submission handler with validation
+document.getElementById('dateForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const dateTime = new Date(document.getElementById('datetime').value);
+    const message = document.getElementById('message').value.trim();
+    const now = new Date();
+    const errorMsg = document.getElementById('dateError');
+    
+    // Validate date is in the future
+    if (dateTime < now) {
+        errorMsg.textContent = "Please choose a future date and time! ⏰";
+        errorMsg.classList.add('show');
+        return;
+    }
+
+    // Validate message length
+    if (message.length < 3) {
+        errorMsg.textContent = "Please add a longer message! 💌";
+        errorMsg.classList.add('show');
+        return;
+    }
+    
+    // Format the date for display
+    const options = { 
+        weekday: 'long', 
+        year: 'numeric', 
+        month: 'long', 
+        day: 'numeric',
+        hour: '2-digit', 
+        minute: '2-digit'
+    };
+    
+    const formattedDate = dateTime.toLocaleDateString('en-US', options);
+    
+    // Display the final message
+    document.getElementById('finalMessage').innerHTML = `
+        <span style="font-size: 3rem">It's a Date! 💝</span><br>
+        <span style="font-size: 1.8rem">${formattedDate}</span><br><br>
+        <span style="font-style: italic; color: #ff1493">"${message}"</span>
+    `;
+});
+
+// Call setMinDateTime when the form is loaded
+setMinDateTime();
