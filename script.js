@@ -110,7 +110,7 @@ function nextStep(step) {
         currentStep.classList.remove('active');
         nextStep.classList.add('active');
         
-        if (step === 6) {
+        if (step === 5) {
             setMinDateTime();
         }
     }
